@@ -22,7 +22,7 @@ public class Allergy implements Serializable {
         this.id = id;
     }
 
-    public Allergy id(Integer id){
+    public Allergy id(Integer id) {
         this.id = id;
         return this;
     }
@@ -35,7 +35,7 @@ public class Allergy implements Serializable {
         this.name = name;
     }
 
-    public Allergy name(String name){
+    public Allergy name(String name) {
         this.name = name;
         return this;
     }

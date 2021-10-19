@@ -15,7 +15,7 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, In
             + "inner join fetch medicalRecord.person as person "
             + "where person.firstName = :firstName "
             + "and person.lastName = :lastName")
-     MedicalRecord findMedicalRecordByFirstAndLastName(@Param("firstName") String firstName,@Param("lastName") String lastName);
+    MedicalRecord findMedicalRecordByFirstAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
 
     @Modifying
     @Query("DELETE FROM MedicalRecord medicalRecord WHERE medicalRecord =:medicalRecord")

@@ -17,6 +17,21 @@ public class PersonInfosDTO {
         this.personDTOS = personDTOS;
     }
 
+    public PersonInfosDTO personDTOS(List<PersonDTO> personDTOS) {
+        this.personDTOS = personDTOS;
+        return this;
+    }
+
+    public PersonInfosDTO numberOfAdult(long numberOfAdult) {
+        this.numberOfAdult = numberOfAdult;
+        return this;
+    }
+
+    public PersonInfosDTO numberOfChild(long numberOfChild) {
+        this.numberOfChild = numberOfChild;
+        return this;
+    }
+
     public long getNumberOfAdult() {
         return numberOfAdult;
     }

@@ -1,8 +1,6 @@
 package com.safetynet.alerts.repository;
 
 
-import com.safetynet.alerts.model.Address;
-import com.safetynet.alerts.model.FireStation;
 import com.safetynet.alerts.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,9 +39,9 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     List<Person> findAllByFirstNameAndLastName(String firstName, String lastName);
 
 
-@Query("select distinct person.email from Person as person "
-        + "inner join person.address as address "
-        + "where address.city = :city")
+    @Query("select distinct person.email from Person as person "
+            + "inner join person.address as address "
+            + "where address.city = :city")
     List<String> findAllAddressMailsByCity(@Param("city") String city);
 }
 

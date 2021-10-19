@@ -2,7 +2,6 @@ package com.safetynet.alerts.dto;
 
 
 import java.util.Date;
-import java.util.List;
 
 public class PersonDTO {
 
@@ -21,6 +20,11 @@ public class PersonDTO {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public PersonDTO firstName(String firstName) {
+        this.firstName = firstName;
+        return this;
     }
 
     public String getLastName() {

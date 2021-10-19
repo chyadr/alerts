@@ -3,45 +3,52 @@ package com.safetynet.alerts.contoller;
 
 import com.safetynet.alerts.ConstantsTest;
 import com.safetynet.alerts.conroller.PersonInfoController;
-import com.safetynet.alerts.service.impl.PersonService;
+import com.safetynet.alerts.service.IPersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@ContextConfiguration(classes = {PersonInfoController.class, PersonService.class})
-@WebMvcTest
+@ExtendWith(MockitoExtension.class)
 public class PersonsInfoControllerTest {
-
-    @Autowired
     private MockMvc mvc;
-    @MockBean
-    private PersonService personService;
+    @Mock
+    private IPersonService personService;
+    @InjectMocks
+    private PersonInfoController personInfoController;
+
+    @BeforeEach
+    public void setup() {
+        // MockMvc standalone approach
+        mvc = MockMvcBuilders.standaloneSetup(personInfoController)
+                .build();
+
+    }
 
     @Test
     public void givenFirstNameLastName_whenFindAllByFirstNameAndLastName_thenReturnListOfPersonInfos_Test()
             throws Exception {
 
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(ConstantsTest.personsInfos);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.personsInfos);
 
-        mvc.perform(get("/personInfo").param("firstName","John" ).param("lastName","Boyd")
+        mvc.perform(get("/personInfo").param("firstName", "John").param("lastName", "Boyd")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].firstName",org.hamcrest.Matchers.is("John")))
-                .andExpect(jsonPath("$[0].lastName",org.hamcrest.Matchers.is("Boyd")));
+                .andExpect(jsonPath("$[0].firstName", org.hamcrest.Matchers.is("John")))
+                .andExpect(jsonPath("$[0].lastName", org.hamcrest.Matchers.is("Boyd")));
     }
 }

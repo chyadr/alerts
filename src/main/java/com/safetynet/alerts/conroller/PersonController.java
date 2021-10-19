@@ -1,11 +1,9 @@
 package com.safetynet.alerts.conroller;
 
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.impl.PersonService;
+import com.safetynet.alerts.service.IPersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -18,50 +16,49 @@ import java.util.List;
 @RequestMapping("person")
 public class PersonController {
     private static final Logger log = LogManager.getLogger(PersonController.class);
+    private final IPersonService personService;
 
-    @Autowired
-    private PersonService personService;
-
+    public PersonController(IPersonService personService) {
+        this.personService = personService;
+    }
 
     @PostMapping()
-    public ResponseEntity<Object> createPerson(@RequestBody Person person)
-    {
-        log.info("[person][createPerson] - params [{}]",person.toString());
+    public ResponseEntity<Object> createPerson(@RequestBody Person person) {
+        log.info("[person][createPerson] - params [{}]", person.toString());
 
-        if (!StringUtils.hasLength(person.getFirstName()) || !StringUtils.hasLength(person.getLastName())){
+        if (!StringUtils.hasLength(person.getFirstName()) || !StringUtils.hasLength(person.getLastName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FirstName and LastName are required !");
         }
-        List<Person> persons = personService.findAllByFirstNameAndLastName(person.getFirstName(),person.getLastName());
+        List<Person> persons = personService.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
 
-        if (!CollectionUtils.isEmpty(persons)){
+        if (!CollectionUtils.isEmpty(persons)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FirstName and LastName are already existed !");
         }
 
-        Person persistedPerson = personService.savePerson(person);
-        log.info("[person] - Response {}",persistedPerson.toString());
+        Person persistedPerson = personService.createPerson(person);
+        log.info("[person] - Response {}", persistedPerson.toString());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(persistedPerson);
     }
 
     @PutMapping
-    public ResponseEntity<Object> updatePerson(@RequestBody Person person){
+    public ResponseEntity<Object> updatePerson(@RequestBody Person person) {
 
-        log.info("[person][updatePerson] - params [{}]",person.toString());
+        log.info("[person][updatePerson] - params [{}]", person.toString());
 
-        if (!StringUtils.hasLength(person.getFirstName()) || !StringUtils.hasLength(person.getLastName())){
+        if (!StringUtils.hasLength(person.getFirstName()) || !StringUtils.hasLength(person.getLastName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FirstName and LastName are required !");
         }
-        List<Person> persons = personService.findAllByFirstNameAndLastName(person.getFirstName(),person.getLastName());
+        List<Person> persons = personService.findAllByFirstNameAndLastName(person.getFirstName(), person.getLastName());
 
-        if (CollectionUtils.isEmpty(persons)){
+        if (CollectionUtils.isEmpty(persons)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("FirstName and LastName given are not found !");
         }
-        if (persons.size()>1){
+        if (persons.size() > 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FirstName and LastName given are not unique !");
         }
-        Person persistedPerson = persons.get(0);
-        BeanUtils.copyProperties(person,persistedPerson,"id","firstName","lastName");
-        Person updatedPerson = personService.savePerson(persistedPerson);
+
+        Person updatedPerson = personService.updatePerson(person, persons.get(0));
         log.info("[person] [updatePerson] - Response {}", updatedPerson.toString());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedPerson);
@@ -69,15 +66,15 @@ public class PersonController {
 
 
     @DeleteMapping
-    public ResponseEntity<String>deleteByFirstAndLastName (@RequestParam(name = "firstName") String firstName,@RequestParam(name = "lastName") String lastName) {
-        log.info("[person][deleteByFirstAndLastName] - params [{}]",firstName,lastName);
+    public ResponseEntity<String> deleteByFirstAndLastName(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
+        log.info("[person][deleteByFirstAndLastName] - params [{}]", firstName, lastName);
 
-        if (!StringUtils.hasLength(firstName) || !StringUtils.hasLength(lastName)){
+        if (!StringUtils.hasLength(firstName) || !StringUtils.hasLength(lastName)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("FirstName and LastName are required !");
         }
 
-        List <Person>  persons = personService.findAllByFirstNameAndLastName( firstName, lastName);
-        if(CollectionUtils.isEmpty(persons)){
+        List<Person> persons = personService.findAllByFirstNameAndLastName(firstName, lastName);
+        if (CollectionUtils.isEmpty(persons)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Person To Be Deleted");
         }
         personService.deletePersons(persons);

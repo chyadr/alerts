@@ -1,12 +1,11 @@
 package com.safetynet.alerts.dto;
 
 
-
 import java.util.List;
 
 public class PersonFireStationNumberDTO {
 
-    private Integer stationNumber ;
+    private Integer stationNumber;
     private List<PersonDTO> personDTOS;
 
     public List<PersonDTO> getPersonDTOS() {

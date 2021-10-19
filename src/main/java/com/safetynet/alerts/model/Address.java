@@ -2,17 +2,14 @@ package com.safetynet.alerts.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table (name = "address")
+@Table(name = "address")
 public class Address implements Serializable {
 
     @Id
@@ -23,13 +20,13 @@ public class Address implements Serializable {
     private String address;
 
     @Column(name = "zip")
-    private  Integer zip;
-    @Column (name = "city")
+    private Integer zip;
+    @Column(name = "city")
     private String city;
 
     @OneToMany(mappedBy = "address")
     @JsonIgnoreProperties("address")
-    private Set<Person> persons= new HashSet<>();
+    private Set<Person> persons = new HashSet<>();
     @OneToOne(mappedBy = "address")
     @JsonIgnoreProperties("address")
     private FireStation fireStation;
@@ -42,7 +39,7 @@ public class Address implements Serializable {
         this.id = id;
     }
 
-    public Address id(Integer id){
+    public Address id(Integer id) {
         this.id = id;
         return this;
     }
@@ -55,7 +52,7 @@ public class Address implements Serializable {
         this.address = address;
     }
 
-    public Address address(String address){
+    public Address address(String address) {
         this.address = address;
         return this;
     }
@@ -68,7 +65,7 @@ public class Address implements Serializable {
         this.zip = zip;
     }
 
-    public Address zip(Integer zip){
+    public Address zip(Integer zip) {
         this.zip = zip;
         return this;
     }
@@ -81,7 +78,7 @@ public class Address implements Serializable {
         this.city = city;
     }
 
-    public Address city(String city){
+    public Address city(String city) {
         this.city = city;
         return this;
     }
@@ -98,7 +95,7 @@ public class Address implements Serializable {
         this.fireStation = fireStation;
     }
 
-    public Address fireStation(FireStation fireStation){
+    public Address fireStation(FireStation fireStation) {
         this.fireStation = fireStation;
         return this;
     }

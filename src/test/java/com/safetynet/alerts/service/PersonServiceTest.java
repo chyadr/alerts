@@ -6,11 +6,9 @@ import com.safetynet.alerts.repository.PersonRepository;
 import com.safetynet.alerts.service.impl.PersonService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -24,19 +22,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 public class PersonServiceTest {
 
-    @TestConfiguration
-    static class PersonServiceImplTestContextConfiguration {
-
-        @Bean
-        public IPersonService personService() {
-            return new PersonService();
-        }
-    }
-
-    @Autowired
+    @InjectMocks
     private PersonService personService;
 
-    @MockBean
+    @Mock
     private PersonRepository personRepository;
 
     @Test
@@ -58,15 +47,6 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void whenFindPhoneNumberByFireStation_thenListOfPhonesShouldBeFound() {
-        Mockito.when(personRepository.findPhoneNumberByFireStation(anyInt()))
-                .thenReturn(ConstantsTest.phones);
-        List<String> phones = personService.findPhoneNumberByFireStation(1);
-        assertNotNull(phones);
-        assertEquals(2, phones.size());
-    }
-
-    @Test
     public void whenFindPersonsByStations_thenListOfPhonesShouldBeFound() {
         Mockito.when(personRepository.findPersonsByStations(anyList()))
                 .thenReturn(ConstantsTest.persons);
@@ -77,27 +57,27 @@ public class PersonServiceTest {
 
     @Test
     public void whenFindAllByFirstNameAndLastName_thenListOfPhonesShouldBeFound() {
-        Mockito.when(personRepository.findAllByFirstNameAndLastName(anyString(),anyString()))
+        Mockito.when(personRepository.findAllByFirstNameAndLastName(anyString(), anyString()))
                 .thenReturn(ConstantsTest.persons);
-        List<Person> persons = personService.findAllByFirstNameAndLastName("fisrtName","lastName");
+        List<Person> persons = personService.findAllByFirstNameAndLastName("fisrtName", "lastName");
         assertNotNull(persons);
         assertEquals(2, persons.size());
     }
 
     @Test
-    public void whenFindAllAddressMailsByCity_thenListOfPhonesShouldBeFound() {
-        Mockito.when(personRepository.findAllAddressMailsByCity(anyString()))
-                .thenReturn(ConstantsTest.emails);
-        List<String> emails = personService.findAllAddressMailsByCity("city");
-        assertNotNull(emails);
-        assertEquals(3, emails.size());
+    public void whenCreatePerson_thenPersonShouldBeSaved() {
+        Mockito.when(personRepository.save(any()))
+                .thenReturn(ConstantsTest.person);
+        Person person = personService.createPerson(new Person());
+        assertNotNull(person);
+        assertEquals(person.getId(), 1);
     }
 
     @Test
-    public void whenSavePerson_thenPersonShouldBeSaved() {
+    public void whenUpdatePerson_thenPersonShouldBeSaved() {
         Mockito.when(personRepository.save(any()))
                 .thenReturn(ConstantsTest.person);
-        Person person = personService.savePerson(new Person());
+        Person person = personService.updatePerson(new Person(), new Person());
         assertNotNull(person);
         assertEquals(person.getId(), 1);
     }
@@ -117,7 +97,7 @@ public class PersonServiceTest {
     public void whenDeletePersons_thenPersonsShouldBeDeleted() {
         doNothing().when(personRepository).deleteAll(any());
         personService.deletePersons(ConstantsTest.persons);
-        verify(personRepository,times(1)).deleteAll(any());
+        verify(personRepository, times(1)).deleteAll(any());
         assertDoesNotThrow(() -> personService.deletePersons(any()));
     }
 

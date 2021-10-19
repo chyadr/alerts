@@ -3,43 +3,46 @@ package com.safetynet.alerts.contoller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.ConstantsTest;
-import com.safetynet.alerts.conroller.FireController;
 import com.safetynet.alerts.conroller.PersonController;
-import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.service.impl.PersonService;
-import org.apache.tomcat.util.bcel.Const;
+import com.safetynet.alerts.service.IPersonService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@ContextConfiguration(classes = {PersonController.class, PersonService.class})
-@WebMvcTest
+@ExtendWith(MockitoExtension.class)
 public class PersonControllerTest {
 
-    @Autowired
     private MockMvc mvc;
-    @MockBean
-    private PersonService personService;
-
-    @Autowired
+    @Mock
+    private IPersonService personService;
+    @InjectMocks
+    private PersonController personController;
     private ObjectMapper objectMapper;
+
+    @BeforeEach
+    public void setup() {
+        // MockMvc standalone approach
+        objectMapper = new ObjectMapper();
+        mvc = MockMvcBuilders.standaloneSetup(personController)
+                .build();
+
+    }
 
 
     @Test
@@ -55,7 +58,7 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenCreatePerson_thenReturnBadRequest_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(ConstantsTest.personsAlreadyExisting);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.personsAlreadyExisting);
 
         mvc.perform(post("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -63,18 +66,17 @@ public class PersonControllerTest {
     }
 
 
-
     @Test
     public void givenPerson_whenCreatePerson_thenReturnCreatedPerson_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(Collections.emptyList());
-        given(personService.savePerson(any())).willReturn(ConstantsTest.person);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
+        when(personService.createPerson(any())).thenReturn(ConstantsTest.person);
 
         mvc.perform(post("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id",org.hamcrest.Matchers.is(1)));
+                .andExpect(jsonPath("$.id", org.hamcrest.Matchers.is(1)));
     }
 
 
@@ -91,7 +93,7 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenUpdatePerson_thenReturnNoContent_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(Collections.emptyList());
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
 
         mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.personNonExistingNames))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -103,7 +105,7 @@ public class PersonControllerTest {
     public void givenPersonNotUnique_whenUpdatePerson_thenReturnBadRequest_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(ConstantsTest.persons);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.persons);
 
         mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -114,8 +116,8 @@ public class PersonControllerTest {
     public void givenPerson_whenUpdatePerson_thenReturnUpdatedPerson_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(), anyString())).willReturn(ConstantsTest.singletonPersons);
-        given(personService.savePerson(any())).willReturn(ConstantsTest.person);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.singletonPersons);
+        when(personService.updatePerson(any(), any())).thenReturn(ConstantsTest.person);
 
         mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -128,8 +130,8 @@ public class PersonControllerTest {
     public void givenPersonWithEmptyFirstLastName_whenDeletePerson_thenReturnBadRequest_Test()
             throws Exception {
 
-        mvc.perform(delete("/person").param("firstName","")
-                        .param("lastName","")
+        mvc.perform(delete("/person").param("firstName", "")
+                        .param("lastName", "")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -138,10 +140,10 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenDeletePerson_thenReturnNoContent_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(),anyString())).willReturn(Collections.emptyList());
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
 
-        mvc.perform(delete("/person").param("firstName","firstName")
-                        .param("lastName","lastName")
+        mvc.perform(delete("/person").param("firstName", "firstName")
+                        .param("lastName", "lastName")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
@@ -150,12 +152,12 @@ public class PersonControllerTest {
     public void givenPerson_whenDeletePerson_thenReturnDeletedPerson_Test()
             throws Exception {
 
-        given(personService.findAllByFirstNameAndLastName(anyString(), anyString())).willReturn(ConstantsTest.singletonPersons);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.singletonPersons);
         doNothing().when(personService).deletePersons(any());
 
-        mvc.perform(delete("/person").param("firstName","firstName")
-                        .param("lastName","lastName")
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(delete("/person").param("firstName", "firstName")
+                        .param("lastName", "lastName")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted());
     }
 

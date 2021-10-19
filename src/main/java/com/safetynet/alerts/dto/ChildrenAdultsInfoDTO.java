@@ -15,12 +15,22 @@ public class ChildrenAdultsInfoDTO {
         this.adults = adults;
     }
 
+    public ChildrenAdultsInfoDTO adults(List<PersonDTO> adults) {
+        this.adults = adults;
+        return this;
+    }
+
     public List<PersonDTO> getChildren() {
         return children;
     }
 
     public void setChildren(List<PersonDTO> children) {
         this.children = children;
+    }
+
+    public ChildrenAdultsInfoDTO children(List<PersonDTO> children) {
+        this.children = children;
+        return this;
     }
 
     @Override

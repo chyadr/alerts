@@ -1,8 +1,6 @@
 package com.safetynet.alerts.repository;
 
-import com.safetynet.alerts.model.Address;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +15,6 @@ public interface FireStationRepository extends JpaRepository<FireStation, Intege
             + "inner join fireStation.address as address "
             + "where address.id = :addressId")
     List<FireStation> findFireStationsByAddressId(@Param("addressId") Integer addressId);
-
 
 
 }

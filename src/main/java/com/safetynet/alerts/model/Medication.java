@@ -22,7 +22,7 @@ public class Medication implements Serializable {
         this.id = id;
     }
 
-    public Medication id(Integer id){
+    public Medication id(Integer id) {
         this.id = id;
         return this;
     }
@@ -35,7 +35,7 @@ public class Medication implements Serializable {
         this.name = name;
     }
 
-    public Medication name(String name){
+    public Medication name(String name) {
         this.name = name;
         return this;
     }

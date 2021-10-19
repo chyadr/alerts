@@ -3,7 +3,7 @@ package com.safetynet.alerts.service.impl;
 import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.repository.PersonRepository;
 import com.safetynet.alerts.service.IPersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +12,12 @@ import java.util.Optional;
 @Service
 public class PersonService implements IPersonService {
 
-    @Autowired
-    private PersonRepository personRepository;
 
+    private final PersonRepository personRepository;
+
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Override
     public List<Person> findPersonsByStationNumber(Integer stationNumber) {
@@ -28,11 +31,6 @@ public class PersonService implements IPersonService {
     }
 
     @Override
-    public List<String> findPhoneNumberByFireStation(Integer fireStationNumber) {
-        return personRepository.findPhoneNumberByFireStation(fireStationNumber);
-    }
-
-    @Override
     public List<Person> findPersonsByStations(List<Integer> stations) {
         return personRepository.findPersonsByStations(stations);
     }
@@ -42,15 +40,16 @@ public class PersonService implements IPersonService {
         return personRepository.findAllByFirstNameAndLastName(firstName, lastName);
     }
 
+
     @Override
-    public List<String> findAllAddressMailsByCity(String city) {
-        return personRepository.findAllAddressMailsByCity(city);
+    public Person createPerson(Person person) {
+        return personRepository.save(person);
     }
 
-
     @Override
-    public Person savePerson( Person person) {
-        return personRepository.save(person);
+    public Person updatePerson(Person sourcePerson, Person targetPerson) {
+        BeanUtils.copyProperties(sourcePerson, targetPerson, "id", "firstName", "lastName");
+        return personRepository.save(targetPerson);
     }
 
     @Override

@@ -3,32 +3,41 @@ package com.safetynet.alerts.contoller;
 
 import com.safetynet.alerts.ConstantsTest;
 import com.safetynet.alerts.conroller.FloodController;
-import com.safetynet.alerts.service.impl.PersonService;
+import com.safetynet.alerts.service.IFloodService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@ContextConfiguration(classes = {FloodController.class, PersonService.class})
-@WebMvcTest
+@ExtendWith(MockitoExtension.class)
 public class FloodControllerTest {
 
-    @Autowired
+
     private MockMvc mvc;
-    @MockBean
-    private PersonService personService;
+    @Mock
+    private IFloodService floodService;
+    @InjectMocks
+    private FloodController floodController;
+
+    @BeforeEach
+    public void setup() {
+        // MockMvc standalone approach
+        mvc = MockMvcBuilders.standaloneSetup(floodController)
+                .build();
+
+    }
 
 
     @Test
@@ -36,15 +45,13 @@ public class FloodControllerTest {
             throws Exception {
 
 
-        given(personService.findPersonsByStations(any())).willReturn(ConstantsTest.persons);
+        when(floodService.findAddressPersonsMedicalRecords(any())).thenReturn(ConstantsTest.addressPersonsMedicalRecordDTOList);
 
-        mvc.perform(get("/flood/stations").param("stations", "1" )
+        mvc.perform(get("/flood/stations").param("stations", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].personDTOS[0].lastName",org.hamcrest.Matchers.is("Boyd")))
-                .andExpect(jsonPath("$[0].addressDTO.address",org.hamcrest.Matchers.is("address")))
-                .andExpect(jsonPath("$[0].personDTOS[1].lastName",org.hamcrest.Matchers.is("Boyd")));
+                .andExpect(jsonPath("$[0].personDTOS[0].firstName", org.hamcrest.Matchers.is("Boyd")));
     }
 
 }

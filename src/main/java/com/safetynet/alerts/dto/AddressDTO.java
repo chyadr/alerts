@@ -2,9 +2,8 @@ package com.safetynet.alerts.dto;
 
 
 import java.util.Comparator;
-import java.util.Objects;
 
-public class AddressDTO implements Comparable<AddressDTO>{
+public class AddressDTO implements Comparable<AddressDTO> {
 
     private String address;
     private int zip;
@@ -35,7 +34,6 @@ public class AddressDTO implements Comparable<AddressDTO>{
     }
 
 
-
     @Override
     public String toString() {
         return "AddressDTO{" +
@@ -47,10 +45,10 @@ public class AddressDTO implements Comparable<AddressDTO>{
 
     @Override
     public int compareTo(AddressDTO o) {
-        if(o == null){
+        if (o == null) {
             return -1;
         }
         final Comparator<AddressDTO> comparator = Comparator.comparing(AddressDTO::getAddress).thenComparing(AddressDTO::getCity).thenComparing(AddressDTO::getZip);
-        return comparator.compare(this,o);
+        return comparator.compare(this, o);
     }
 }

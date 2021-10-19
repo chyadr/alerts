@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -44,7 +42,7 @@ public class MedicalRecord implements Serializable {
         this.id = id;
     }
 
-    public MedicalRecord id(Integer id){
+    public MedicalRecord id(Integer id) {
         this.id = id;
         return this;
     }
@@ -57,7 +55,7 @@ public class MedicalRecord implements Serializable {
         this.person = person;
     }
 
-    public MedicalRecord person(Person person){
+    public MedicalRecord person(Person person) {
         this.person = person;
         return this;
     }
@@ -70,7 +68,7 @@ public class MedicalRecord implements Serializable {
         this.allergies = allergies;
     }
 
-    public MedicalRecord allergies(Set<Allergy> allergies){
+    public MedicalRecord allergies(Set<Allergy> allergies) {
         this.allergies = allergies;
         return this;
     }
@@ -83,7 +81,7 @@ public class MedicalRecord implements Serializable {
         this.medications = medications;
     }
 
-    public MedicalRecord medications(Set<Medication> medications){
+    public MedicalRecord medications(Set<Medication> medications) {
         this.medications = medications;
         return this;
     }

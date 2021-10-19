@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
-@Table (name = "fire_station")
+@Table(name = "fire_station")
 public class FireStation implements Serializable {
 
     @Id
@@ -16,7 +15,7 @@ public class FireStation implements Serializable {
     private Integer id;
 
     @Column(name = "station")
-    private  Integer station;
+    private Integer station;
 
     @OneToOne
     @JsonIgnoreProperties("fireStation")
@@ -30,7 +29,7 @@ public class FireStation implements Serializable {
         this.id = id;
     }
 
-    public FireStation id(Integer id){
+    public FireStation id(Integer id) {
         this.id = id;
         return this;
     }
@@ -43,7 +42,7 @@ public class FireStation implements Serializable {
         this.station = station;
     }
 
-    public FireStation station(Integer station){
+    public FireStation station(Integer station) {
         this.station = station;
         return this;
     }
@@ -56,7 +55,7 @@ public class FireStation implements Serializable {
         this.address = address;
     }
 
-    public FireStation address(Address address){
+    public FireStation address(Address address) {
         this.address = address;
         return this;
     }

@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "person")
@@ -31,7 +28,7 @@ public class Person implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("persons")
-    @JoinColumn(name = "address_id",referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
@@ -45,7 +42,7 @@ public class Person implements Serializable {
         this.firstName = firstName;
     }
 
-    public Person firstName(String firstName){
+    public Person firstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -58,7 +55,7 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    public Person lastName(String lastName){
+    public Person lastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
@@ -71,7 +68,7 @@ public class Person implements Serializable {
         this.address = address;
     }
 
-    public Person address(Address address){
+    public Person address(Address address) {
         this.address = address;
         return this;
     }
@@ -84,7 +81,7 @@ public class Person implements Serializable {
         this.phone = phone;
     }
 
-    public Person phone(String phone){
+    public Person phone(String phone) {
         this.phone = phone;
         return this;
     }
@@ -97,7 +94,7 @@ public class Person implements Serializable {
         this.email = email;
     }
 
-    public Person email(String email){
+    public Person email(String email) {
         this.email = email;
         return this;
     }
@@ -110,7 +107,7 @@ public class Person implements Serializable {
         this.id = id;
     }
 
-    public Person id(Integer id){
+    public Person id(Integer id) {
         this.id = id;
         return this;
     }
@@ -123,7 +120,7 @@ public class Person implements Serializable {
         this.medicalRecord = medicalRecord;
     }
 
-    public Person medicalRecord(MedicalRecord medicalRecord){
+    public Person medicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
         return this;
     }
@@ -136,7 +133,7 @@ public class Person implements Serializable {
         this.birthdate = birthdate;
     }
 
-    public Person birthday(Date birthdate){
+    public Person birthday(Date birthdate) {
         this.birthdate = birthdate;
         return this;
     }
