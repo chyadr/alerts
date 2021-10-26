@@ -1,15 +1,10 @@
 package com.safetynet.alerts.service;
 
-import com.safetynet.alerts.model.MedicalRecord;
-import org.springframework.data.repository.query.Param;
-
 public interface IMedicalRecordService {
-    MedicalRecord createMedicalRecord(MedicalRecord medicalRecord);
+    com.safetynet.alerts.model.MedicalRecord createMedicalRecord(com.safetynet.alerts.model.MedicalRecord medicalRecord);
 
-    MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord, MedicalRecord persistedMedicalRecord);
-
-    MedicalRecord findMedicalRecordByFirstAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-
-    void deleteMedicalRecord(MedicalRecord medicalRecord);
+    com.safetynet.alerts.model.MedicalRecord updateMedicalRecord(com.safetynet.alerts.model.MedicalRecord medicalRecord);
+    void deleteMedicalRecord(String firstName, String lastName);
+    boolean existMedicalRecord (String firstName, String lastName);
 
 }

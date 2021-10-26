@@ -1,7 +1,7 @@
 package com.safetynet.alerts.conroller;
 
 
-import com.safetynet.alerts.dto.PersonFireStationNumberDTO;
+import com.safetynet.alerts.dto.FireDTO;
 import com.safetynet.alerts.service.IFireService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,10 +23,10 @@ public class FireController {
     }
 
     @GetMapping
-    public ResponseEntity<PersonFireStationNumberDTO> findPersonsByStationNumber(@RequestParam(name = "address") String address) {
+    public ResponseEntity<FireDTO> findPersonsByStationNumber(@RequestParam(name = "address") String address) {
         log.info("[fire] - params [{}]", address);
 
-        PersonFireStationNumberDTO personFireStationNumberDTO = fireService.findPersonFireStationNumber(address);
+        FireDTO personFireStationNumberDTO = fireService.findPersonFireStationNumber(address);
 
         log.info("[fire] - Response {}", personFireStationNumberDTO.toString());
 

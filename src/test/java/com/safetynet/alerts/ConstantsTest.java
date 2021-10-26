@@ -5,46 +5,51 @@ import com.safetynet.alerts.model.*;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public final class ConstantsTest {
 
     public static final List<String> phones = Arrays.asList("841-874-6512", "841-874-6513");
 
-    public static final List<Person> personsInfos = Collections.singletonList(new Person().firstName("John").lastName("Boyd"));
+    public static final List<Person> persons = new ArrayList<>(Arrays.asList(new Person().email("email").firstName("John").lastName("Boyd").address("address").zip(10000).city("city"),
+            new Person().email("email").firstName("Jacob").lastName("Boyd").address("address").zip(10000).city("city"),
+            new Person().email("email").firstName("xxx").lastName("yyy").address("zzz").zip(10000).city("rrr"),
+            new Person().firstName("delete").lastName("delete").city("delete").address("delete")));
 
-    public static final List<Person> persons = Arrays.asList(new Person().firstName("John").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))), new Person().firstName("Jacob").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))).medicalRecord(new MedicalRecord().id(1)));
+    public static final List<PersonMedicalRecordDTO> medicalRecordDTOS = Arrays.asList(new PersonMedicalRecordDTO().medicalRecord(new com.safetynet.alerts.model.MedicalRecord()).person(new com.safetynet.alerts.model.Person().firstName("John").lastName("Boyd")));
 
-    public static final List<Person> personsWithBirthDate = Arrays.asList(new Person().birthday(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("John").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))), new Person().birthday(Date.from(LocalDate.of(1990, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("Jacob").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))));
+    public static final List<MedicalRecord> medicalRecords = new ArrayList<>(Arrays.asList(new MedicalRecord().firstName("John").lastName("Boyd").allergies(Collections.singleton("allergy")).medications(Collections.singleton("medication")).birthdate(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))),
+            new MedicalRecord().firstName("Jacob").lastName("Boyd").allergies(Collections.singleton("allergy")).medications(Collections.singleton("medication")).birthdate(Date.from(LocalDate.of(2000, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC)))
+            ,new MedicalRecord().firstName("deleteMedical").lastName("deleteMedical"),new MedicalRecord().firstName("updateMedical").lastName("updateMedical").medications(new HashSet<>(List.of("med1","med2")))));
 
     public static final List<String> emails = Arrays.asList("a@gmail.com", "b@gmail.com", "c@gmail.com");
 
-    public static final MedicalRecord medicalRecord = new MedicalRecord().id(1).person(new Person().id(1).firstName("John").lastName("Boyd")).allergies(Collections.singleton(new Allergy().id(1).name("allergy"))).medications(Collections.singleton(new Medication().id(1).name("medication")));
+    public static final MedicalRecord medicalRecord = new MedicalRecord().firstName("John").lastName("Boyd").allergies(Collections.singleton("allergy")).medications(Collections.singleton("medication"));
 
-    public static final FireStation fireStation = new FireStation().id(1).address(new Address().id(1));
+    public static final FireStation fireStation = new FireStation().station(1).address("address");
 
-    public static final FireStation fireStationWithoutAddress = new FireStation().id(1);
+    public static final FireStation fireStationWithoutAddress = new FireStation();
 
-    public static final List<Person> personsAlreadyExisting = List.of(new Person().birthday(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("").lastName("").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))).id(1));
+    public static final FireStation fireStationWithAddressStationNull = new FireStation().address("address").station(null);
 
-    public static final Person personEmptyNames = new Person().birthday(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("").lastName("").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))).id(1);
+    public static final List<FireStation> fireStations = new ArrayList<>(Arrays.asList(new FireStation().station(1).address("address"),new FireStation().station(2).address("address"),new FireStation().station(3).address("address3"),new FireStation().station(2).address("addressToBeDeleted")));
 
-    public static final Person personNonExistingNames = new Person().birthday(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("NonExistingFirstName").lastName("NonExistingLastName").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))).id(1);
+    public static final Person person = new Person().firstName("John").lastName("Boyd").address("address").zip(10000).city("city");
 
-    public static final Person person = new Person().birthday(Date.from(LocalDate.of(2010, 1, 1).atStartOfDay().toInstant(ZoneOffset.UTC))).firstName("John").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))).id(1);
+    public static final Person personEmptyNames = new Person().address("address").zip(10000).city("city");
 
-    public static final List<Person> singletonPersons = List.of(new Person().id(1).firstName("John").lastName("Boyd").address(new Address().address("address").zip(10000).city("city").fireStation(new FireStation().station(1))));
 
-    public static final MedicalRecord medicalRecordEmptyNames = new MedicalRecord().id(1).person(new Person());
+    public static final MedicalRecord medicalRecordEmptyNames = new MedicalRecord();
 
-    public static final ChildrenAdultsInfoDTO childrenAdultsInfoDTO = new ChildrenAdultsInfoDTO().children(Collections.singletonList(new PersonDTO())).adults(Collections.singletonList(new PersonDTO()));
+    public static final ChildrenAdultsInfoDTO childrenAdultsInfoDTO = new ChildrenAdultsInfoDTO().children(Collections.singletonList(new com.safetynet.alerts.model.Person())).adults(Collections.singletonList(new com.safetynet.alerts.model.Person()));
 
-    public static final List<AddressPersonsMedicalRecordDTO> addressPersonsMedicalRecordDTOList = Collections.singletonList(new AddressPersonsMedicalRecordDTO().personDTOS(Collections.singleton(new PersonDTO().firstName("Boyd"))));
+    public static final Map<String,List<PersonMedicalRecordDTO>> mapPersonMedicalRecordDTO = Collections.singletonMap("address",List.of(new PersonMedicalRecordDTO().person(new com.safetynet.alerts.model.Person().firstName("Boyd"))));
 
-    public static final PersonFireStationNumberDTO personFireStationDTO = new PersonFireStationNumberDTO();
-    public static final PersonInfosDTO personInfosDTO = new PersonInfosDTO().numberOfAdult(1).numberOfChild(1).personDTOS(List.of(new PersonDTO(), new PersonDTO()));
+    public static final FireDTO personFireStationDTO = new FireDTO();
+
+    public static final PersonInfosDTO personInfosDTO = new PersonInfosDTO().numberOfAdult(1).numberOfChild(1).persons(List.of(new com.safetynet.alerts.model.Person(), new com.safetynet.alerts.model.Person()));
+
+
+
 
 }

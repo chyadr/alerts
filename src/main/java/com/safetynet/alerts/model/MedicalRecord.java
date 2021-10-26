@@ -1,93 +1,91 @@
 package com.safetynet.alerts.model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Set;
 
+public class MedicalRecord {
 
-@Entity
-@Table(name = "medical_record")
-public class MedicalRecord implements Serializable {
+    private String firstName;
+    private String lastName;
+    @JsonFormat(pattern="MM/dd/yyyy")
+    private Date birthdate;
+    private Set<String> medications;
+    private Set<String> allergies;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @OneToOne
-    @JsonIgnoreProperties("medicalRecord")
-    private Person person;
-
-    @JsonIgnoreProperties("medicalRecord")
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "medical_record_allergy",
-            joinColumns = @JoinColumn(name = "medical_record_id"),
-            inverseJoinColumns = @JoinColumn(name = "allergy_id"))
-    private Set<Allergy> allergies = new HashSet<>();
-
-    @JsonIgnoreProperties("medicalRecord")
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "medical_record_medication",
-            joinColumns = @JoinColumn(name = "medical_record_id"),
-            inverseJoinColumns = @JoinColumn(name = "medication_id"))
-    private Set<Medication> medications = new HashSet<>();
-
-    public Integer getId() {
-        return id;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public MedicalRecord id(Integer id) {
-        this.id = id;
+    public MedicalRecord firstName(String firstName) {
+        this.firstName = firstName;
         return this;
     }
 
-    public Person getPerson() {
-        return person;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public MedicalRecord person(Person person) {
-        this.person = person;
+    public MedicalRecord lastName(String lastName) {
+        this.lastName = lastName;
         return this;
     }
 
-    public Set<Allergy> getAllergies() {
-        return allergies;
+    public Date getBirthdate() {
+        return birthdate;
     }
 
-    public void setAllergies(Set<Allergy> allergies) {
-        this.allergies = allergies;
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 
-    public MedicalRecord allergies(Set<Allergy> allergies) {
-        this.allergies = allergies;
+    public MedicalRecord birthdate(Date birthdate) {
+        this.birthdate = birthdate;
         return this;
     }
 
-    public Set<Medication> getMedications() {
+    public Set<String> getMedications() {
         return medications;
     }
 
-    public void setMedications(Set<Medication> medications) {
+    public void setMedications(Set<String> medications) {
         this.medications = medications;
     }
 
-    public MedicalRecord medications(Set<Medication> medications) {
+    public MedicalRecord medications(Set<String> medications) {
         this.medications = medications;
         return this;
     }
 
+    public Set<String> getAllergies() {
+        return allergies;
+    }
 
+    public void setAllergies(Set<String> allergies) {
+        this.allergies = allergies;
+    }
+
+    public MedicalRecord allergies(Set<String> allergies) {
+        this.allergies = allergies;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "MedicalRecord{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthdate=" + birthdate +
+                ", medications=" + medications +
+                ", allergies=" + allergies +
+                '}';
+    }
 }
-
-
-

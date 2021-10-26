@@ -1,26 +1,21 @@
 package com.safetynet.alerts.service;
 
+import com.safetynet.alerts.dto.PersonMedicalRecordDTO;
 import com.safetynet.alerts.model.Person;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IPersonService {
 
-    List<Person> findPersonsByStationNumber(Integer StationNumber);
 
-    List<Person> findPersonsByAddress(String address);
+    List<PersonMedicalRecordDTO> findAllByFirstNameAndLastName(String firstName, String lastName);
 
-    List<Person> findPersonsByStations(List<Integer> stations);
+    boolean existPersonByFirstNameAndLastName (String firstName, String lastName);
 
-    List<Person> findAllByFirstNameAndLastName(String firstName, String lastName);
+    com.safetynet.alerts.model.Person createPerson(com.safetynet.alerts.model.Person person);
 
-    Person createPerson(Person person);
+    Person updatePerson(com.safetynet.alerts.model.Person person);
 
-    Person updatePerson(Person sourcePerson, Person targetPerson);
-
-    Optional<Person> getPersonById(int id);
-
-    void deletePersons(List<Person> persons);
+    void deletePerson(String firstName, String lastName);
 
 }

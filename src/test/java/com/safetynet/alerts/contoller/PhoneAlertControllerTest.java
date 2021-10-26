@@ -42,7 +42,7 @@ public class PhoneAlertControllerTest {
             throws Exception {
 
 
-        when(phoneAlertService.findPhoneNumberByFireStation(anyInt())).thenReturn(ConstantsTest.phones);
+        when(phoneAlertService.findPhoneNumberByFireStationNumber(anyInt())).thenReturn(ConstantsTest.phones);
 
         mvc.perform(get("/phoneAlert").param("firestation", "1")
                         .contentType(MediaType.APPLICATION_JSON))

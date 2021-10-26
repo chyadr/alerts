@@ -1,24 +1,26 @@
 package com.safetynet.alerts.dto;
 
+import com.safetynet.alerts.model.Person;
+
 import java.util.List;
 
 public class PersonInfosDTO {
 
     private long numberOfAdult;
     private long numberOfChild;
-    private List<PersonDTO> personDTOS;
+    private List<Person> persons;
 
 
-    public List<PersonDTO> getPersonDTOS() {
-        return personDTOS;
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setPersonDTOS(List<PersonDTO> personDTOS) {
-        this.personDTOS = personDTOS;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 
-    public PersonInfosDTO personDTOS(List<PersonDTO> personDTOS) {
-        this.personDTOS = personDTOS;
+    public PersonInfosDTO persons(List<Person> persons) {
+        this.persons = persons;
         return this;
     }
 
@@ -53,7 +55,7 @@ public class PersonInfosDTO {
         return "PersonInfosDTO{" +
                 "numberOfAdult=" + numberOfAdult +
                 ", numberOfChild=" + numberOfChild +
-                ", personDTOS=" + personDTOS +
+                ", persons=" + persons +
                 '}';
     }
 }

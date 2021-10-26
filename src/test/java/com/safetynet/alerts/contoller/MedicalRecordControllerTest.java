@@ -61,18 +61,7 @@ public class MedicalRecordControllerTest {
     public void givenMedicalRecordWithNonExistingFirstLastName_whenCreateMedicalRecord_thenReturnBadRequest_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
-
-        mvc.perform(post("/medicalRecord").content(objectMapper.writeValueAsString(ConstantsTest.medicalRecord))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void givenFirstLastNameAreNotUnique_whenCreateMedicalRecord_thenReturnBadRequest_Test()
-            throws Exception {
-
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.persons);
+        when(medicalRecordService.existMedicalRecord(anyString(), anyString())).thenReturn(true);
 
         mvc.perform(post("/medicalRecord").content(objectMapper.writeValueAsString(ConstantsTest.medicalRecord))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -83,14 +72,13 @@ public class MedicalRecordControllerTest {
     public void givenMedicalRecord_whenCreateMedicalRecord_thenReturnCreatedMedicalRecord_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.personsAlreadyExisting);
+        when(medicalRecordService.existMedicalRecord(anyString(), anyString())).thenReturn(false);
         when(medicalRecordService.createMedicalRecord(any())).thenReturn(ConstantsTest.medicalRecord);
 
         mvc.perform(post("/medicalRecord").content(objectMapper.writeValueAsString(ConstantsTest.medicalRecord))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", org.hamcrest.Matchers.is(1)))
-                .andExpect(jsonPath("$.person.id", org.hamcrest.Matchers.is(1)));
+                .andExpect(jsonPath("$.firstName", org.hamcrest.Matchers.is("John")));
     }
 
     @Test
@@ -106,8 +94,6 @@ public class MedicalRecordControllerTest {
     public void givenMedicalRecordWithNonExistingFirstLastName_whenUpdateMedicalRecord_thenReturnBadRequest_Test()
             throws Exception {
 
-        when(medicalRecordService.findMedicalRecordByFirstAndLastName(anyString(), anyString())).thenReturn(null);
-
         mvc.perform(put("/medicalRecord").content(objectMapper.writeValueAsString(ConstantsTest.medicalRecord))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -117,14 +103,15 @@ public class MedicalRecordControllerTest {
     public void givenMedicalRecord_whenUpdateMedicalRecord_thenReturnUpdatedMedicalRecord_Test()
             throws Exception {
 
-        when(medicalRecordService.findMedicalRecordByFirstAndLastName(anyString(), anyString())).thenReturn(new MedicalRecord());
-        when(medicalRecordService.updateMedicalRecord(any(), any())).thenReturn(ConstantsTest.medicalRecord);
+        when(medicalRecordService.existMedicalRecord(anyString(), anyString())).thenReturn(true);
+        when(medicalRecordService.updateMedicalRecord(any())).thenReturn(ConstantsTest.medicalRecord);
+
 
         mvc.perform(put("/medicalRecord").content(objectMapper.writeValueAsString(ConstantsTest.medicalRecord))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", org.hamcrest.Matchers.is(1)))
-                .andExpect(jsonPath("$.person.id", org.hamcrest.Matchers.is(1)));
+                .andExpect(jsonPath("$.firstName", org.hamcrest.Matchers.is("John")))
+                .andExpect(jsonPath("$.lastName", org.hamcrest.Matchers.is("Boyd")));
     }
 
     @Test
@@ -141,20 +128,20 @@ public class MedicalRecordControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenDeletePerson_thenReturnNoContent_Test()
             throws Exception {
 
-        when(medicalRecordService.findMedicalRecordByFirstAndLastName(anyString(), anyString())).thenReturn(null);
+        when(medicalRecordService.existMedicalRecord(anyString(), anyString())).thenReturn(false);
 
         mvc.perform(delete("/medicalRecord").param("firstName", "firstName")
                         .param("lastName", "lastName")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void givenMedicalRecord_whenDeleteMedicalRecord_thenReturnDeletedMedicalRecord_Test()
             throws Exception {
 
-        when(medicalRecordService.findMedicalRecordByFirstAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.medicalRecord);
-        doNothing().when(medicalRecordService).deleteMedicalRecord(any());
+        when(medicalRecordService.existMedicalRecord(anyString(), anyString())).thenReturn(true);
+        doNothing().when(medicalRecordService).deleteMedicalRecord(anyString(),anyString());
 
         mvc.perform(delete("/medicalRecord").param("firstName", "firstName")
                         .param("lastName", "lastName")

@@ -2,6 +2,7 @@ package com.safetynet.alerts.conroller;
 
 
 import com.safetynet.alerts.dto.AddressPersonsMedicalRecordDTO;
+import com.safetynet.alerts.dto.PersonMedicalRecordDTO;
 import com.safetynet.alerts.service.IFloodService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -26,14 +28,14 @@ public class FloodController {
     }
 
     @GetMapping("stations")
-    public ResponseEntity<List<AddressPersonsMedicalRecordDTO>> findAddressPersonsMedicalRecordsByStations(@RequestParam(name = "stations") List<Integer> stations) {
+    public ResponseEntity<Map<String,List<PersonMedicalRecordDTO>>> findAddressPersonsMedicalRecordsByStations(@RequestParam(name = "stations") List<Integer> stations) {
         log.info("[flood] - params [{}]", stations);
 
-        List<AddressPersonsMedicalRecordDTO> addressPersonsMedicalRecordDTOS = floodService.findAddressPersonsMedicalRecords(stations);
+        Map<String,List<PersonMedicalRecordDTO>> map = floodService.findAddressPersonsMedicalRecords(stations);
 
-        log.info("[flood] - Response {}", addressPersonsMedicalRecordDTOS.toString());
+        log.info("[flood] - Response {}", map.toString());
 
-        return ResponseEntity.status(HttpStatus.OK).body(addressPersonsMedicalRecordDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
 

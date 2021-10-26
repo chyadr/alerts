@@ -58,7 +58,7 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenCreatePerson_thenReturnBadRequest_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.personsAlreadyExisting);
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(true);
 
         mvc.perform(post("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -70,13 +70,14 @@ public class PersonControllerTest {
     public void givenPerson_whenCreatePerson_thenReturnCreatedPerson_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(false);
         when(personService.createPerson(any())).thenReturn(ConstantsTest.person);
 
         mvc.perform(post("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", org.hamcrest.Matchers.is(1)));
+                .andExpect(jsonPath("$.firstName", org.hamcrest.Matchers.is("John")))
+                .andExpect(jsonPath("$.lastName", org.hamcrest.Matchers.is("Boyd")));
     }
 
 
@@ -93,36 +94,26 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenUpdatePerson_thenReturnNoContent_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
-
-        mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.personNonExistingNames))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
-    }
-
-
-    @Test
-    public void givenPersonNotUnique_whenUpdatePerson_thenReturnBadRequest_Test()
-            throws Exception {
-
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.persons);
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(false);
 
         mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
+
     @Test
     public void givenPerson_whenUpdatePerson_thenReturnUpdatedPerson_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.singletonPersons);
-        when(personService.updatePerson(any(), any())).thenReturn(ConstantsTest.person);
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(true);
+        when(personService.updatePerson(any())).thenReturn(ConstantsTest.person);
 
         mvc.perform(put("/person").content(objectMapper.writeValueAsString(ConstantsTest.person))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.id", org.hamcrest.Matchers.is(1)));
+                .andExpect(jsonPath("$.firstName", org.hamcrest.Matchers.is("John")))
+                .andExpect(jsonPath("$.lastName", org.hamcrest.Matchers.is("Boyd")));
     }
 
 
@@ -140,20 +131,20 @@ public class PersonControllerTest {
     public void givenPersonWithNonExistingFirstLastName_whenDeletePerson_thenReturnNoContent_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(Collections.emptyList());
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(false);
 
         mvc.perform(delete("/person").param("firstName", "firstName")
                         .param("lastName", "lastName")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     public void givenPerson_whenDeletePerson_thenReturnDeletedPerson_Test()
             throws Exception {
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.singletonPersons);
-        doNothing().when(personService).deletePersons(any());
+        when(personService.existPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(true);
+        doNothing().when(personService).deletePerson(anyString(),anyString());
 
         mvc.perform(delete("/person").param("firstName", "firstName")
                         .param("lastName", "lastName")

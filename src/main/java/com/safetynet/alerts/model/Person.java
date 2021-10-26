@@ -1,38 +1,15 @@
 package com.safetynet.alerts.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-
-@Entity
-@Table(name = "person")
-public class Person implements Serializable {
+public class Person {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "first_Name")
     private String firstName;
-    @Column(name = "last_Name")
     private String lastName;
-    @Column(name = "phone")
     private String phone;
-    @Column(name = "email")
     private String email;
-    @Column(name = "birthdate")
-    private Date birthdate;
-
-    @ManyToOne
-    @JsonIgnoreProperties("persons")
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
-
-    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
-    private MedicalRecord medicalRecord;
+    private String address;
+    private String city;
+    private Integer zip;
+    private Integer age;
 
     public String getFirstName() {
         return firstName;
@@ -57,19 +34,6 @@ public class Person implements Serializable {
 
     public Person lastName(String lastName) {
         this.lastName = lastName;
-        return this;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Person address(Address address) {
-        this.address = address;
         return this;
     }
 
@@ -99,43 +63,63 @@ public class Person implements Serializable {
         return this;
     }
 
-    public Integer getId() {
-        return id;
+    public String getCity() {
+        return city;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public Person id(Integer id) {
-        this.id = id;
+    public Person city(String city) {
+        this.city = city;
         return this;
     }
 
-    public MedicalRecord getMedicalRecord() {
-        return medicalRecord;
+    public String getAddress() {
+        return address;
     }
 
-    public void setMedicalRecord(MedicalRecord medicalRecord) {
-        this.medicalRecord = medicalRecord;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public Person medicalRecord(MedicalRecord medicalRecord) {
-        this.medicalRecord = medicalRecord;
+    public Person address(String address) {
+        this.address = address;
         return this;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Integer getZip() {
+        return zip;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setZip(Integer zip) {
+        this.zip = zip;
     }
 
-    public Person birthday(Date birthdate) {
-        this.birthdate = birthdate;
+    public Person zip(Integer zip) {
+        this.zip = zip;
         return this;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", zip=" + zip +
+                '}';
+    }
 }

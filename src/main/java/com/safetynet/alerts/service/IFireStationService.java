@@ -10,13 +10,11 @@ public interface IFireStationService {
 
     FireStation createFireStation(FireStation fireStation);
 
-    FireStation saveFireStation(FireStation fireStation);
+    FireStation updateFireStation(FireStation fireStation);
 
-    Optional<FireStation> findFireStationById(int id);
+    void deleteFireStation(String address);
 
-    void deleteFireStation(FireStation fireStation);
-
-    List<FireStation> findFireStationsByAddressId(int id);
+    boolean existFireStationsByAddress(String address);
 
     PersonInfosDTO findPersonsByStationNumber(Integer stationNumber);
 }

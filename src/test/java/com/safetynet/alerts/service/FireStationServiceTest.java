@@ -2,9 +2,8 @@ package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.ConstantsTest;
 import com.safetynet.alerts.dto.PersonInfosDTO;
+import com.safetynet.alerts.model.Data;
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.repository.FireStationRepository;
-import com.safetynet.alerts.repository.PersonRepository;
 import com.safetynet.alerts.service.impl.FireStationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,12 +12,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class FireStationServiceTest {
@@ -27,53 +22,52 @@ public class FireStationServiceTest {
     private FireStationService fireStationService;
 
     @Mock
-    private FireStationRepository fireStationRepository;
-    @Mock
-    private PersonRepository personRepository;
-
+    private Data data;
 
     @Test
     public void whenCreateFireStation_thenFireStationShouldBeCreated() {
-        Mockito.when(fireStationRepository.save(any())).thenReturn(ConstantsTest.fireStation);
         FireStation fireStation = fireStationService.createFireStation(new FireStation());
         assertNotNull(fireStation);
-        assertEquals(fireStation.getId(), 1);
     }
 
     @Test
     public void whenSaveFireStation_thenFireStationShouldBeSaved() {
-        Mockito.when(fireStationRepository.save(any())).thenReturn(ConstantsTest.fireStation);
-        FireStation fireStation = fireStationService.saveFireStation(new FireStation());
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
+        FireStation fireStation = fireStationService.updateFireStation(new FireStation().address("address3").station(100));
         assertNotNull(fireStation);
-        assertEquals(fireStation.getId(), 1);
+        assertEquals(fireStation.getAddress(),"address3");
+        assertEquals(fireStation.getStation(),100);
     }
 
+
     @Test
-    public void whenFindFireStationById_thenFireStationShouldBeFound() {
-        Mockito.when(fireStationRepository.findById(anyInt())).thenReturn(Optional.of(ConstantsTest.fireStation));
-        Optional<FireStation> fireStation = fireStationService.findFireStationById(1);
-        assertNotNull(fireStation);
-        assertTrue(fireStation.isPresent());
-        assertEquals(fireStation.get().getId(), 1);
+    public void whenExistFireStationsByAddress_thenTrueShouldBeExisted() {
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
+        boolean existFireStation= fireStationService.existFireStationsByAddress("address3");
+        assertTrue(existFireStation);
     }
+
+
 
     @Test
     public void whenDeleteFireStation_thenFireStationShouldBeDeleted() {
-        doNothing().when(fireStationRepository).delete(any());
-        fireStationService.deleteFireStation(ConstantsTest.fireStation);
-        verify(fireStationRepository, times(1)).delete(any());
-        assertDoesNotThrow(() -> fireStationService.deleteFireStation(any()));
-    }
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
 
+        assertDoesNotThrow(() -> fireStationService.deleteFireStation("addressToBeDeleted"));
+    }
     @Test
-    public void whenFindPersonsByStationNumber_thenPersonShouldBeFound() {
-        when(personRepository.findPersonsByStationNumber(anyInt())).thenReturn(ConstantsTest.personsWithBirthDate);
+    public void WhenFindPersonsByStationNumber_thenPersonShouldBeFound() {
+        Mockito.when(data.getPersons()).thenReturn(ConstantsTest.persons);
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
+        Mockito.when(data.getMedicalrecords()).thenReturn(ConstantsTest.medicalRecords);
         PersonInfosDTO personInfosDTO = fireStationService.findPersonsByStationNumber(1);
+
         assertNotNull(personInfosDTO);
-        assertTrue(personInfosDTO.getNumberOfAdult() > 0);
-        assertTrue(personInfosDTO.getNumberOfChild() > 0);
+        assertEquals(1, personInfosDTO.getNumberOfAdult());
+        assertEquals(1,personInfosDTO.getNumberOfChild());
+        assertEquals(2,personInfosDTO.getPersons().size());
 
     }
-
 
 }
+

@@ -1,40 +1,34 @@
 package com.safetynet.alerts.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class AddressPersonsMedicalRecordDTO {
 
 
-    private Set<PersonDTO> personDTOS;
-    private AddressDTO addressDTO;
+    private String address;
+    private List<PersonMedicalRecordDTO> personMedicalRecordDTOS;
 
-
-    public Set<PersonDTO> getPersonDTOS() {
-        return personDTOS;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPersonDTOS(Set<PersonDTO> personDTOS) {
-        this.personDTOS = personDTOS;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public AddressPersonsMedicalRecordDTO personDTOS(Set<PersonDTO> personDTOS) {
-        this.personDTOS = personDTOS;
-        return this;
+    public List<PersonMedicalRecordDTO> getPersonMedicalRecordDTOS() {
+        return personMedicalRecordDTOS;
     }
 
-    public AddressDTO getAddressDTO() {
-        return addressDTO;
-    }
-
-    public void setAddressDTO(AddressDTO addressDTO) {
-        this.addressDTO = addressDTO;
+    public void setPersonMedicalRecordDTOS(List<PersonMedicalRecordDTO> personMedicalRecordDTOS) {
+        this.personMedicalRecordDTOS = personMedicalRecordDTOS;
     }
 
     @Override
     public String toString() {
         return "AddressPersonsMedicalRecordDTO{" +
-                "personDTOS=" + personDTOS +
-                ", addressDTO=" + addressDTO +
+                "address='" + address + '\'' +
+                ", personMedicalRecordDTOS=" + personMedicalRecordDTOS +
                 '}';
     }
 }

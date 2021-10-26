@@ -1,38 +1,10 @@
 package com.safetynet.alerts.model;
+public class FireStation {
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import java.io.Serializable;
-
-@Entity
-@Table(name = "fire_station")
-public class FireStation implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "station")
     private Integer station;
+    private String address;
 
-    @OneToOne
-    @JsonIgnoreProperties("fireStation")
-    private Address address;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public FireStation id(Integer id) {
-        this.id = id;
-        return this;
-    }
 
     public Integer getStation() {
         return station;
@@ -47,17 +19,25 @@ public class FireStation implements Serializable {
         return this;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public FireStation address(Address address) {
+    public FireStation address(String address) {
         this.address = address;
         return this;
     }
 
+
+    @Override
+    public String toString() {
+        return "FireStation{" +
+                "station=" + station +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

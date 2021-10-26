@@ -1,7 +1,7 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.ConstantsTest;
-import com.safetynet.alerts.repository.PersonRepository;
+import com.safetynet.alerts.model.Data;
 import com.safetynet.alerts.service.impl.PhoneAlertService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(SpringExtension.class)
 
@@ -24,14 +23,13 @@ public class PhoneAlertServiceTest {
     private PhoneAlertService phoneAlertService;
 
     @Mock
-    private PersonRepository personRepository;
-
+    private Data data;
 
     @Test
     public void whenFindPhoneNumberByFireStation_thenListOfPhonesShouldBeFound() {
-        Mockito.when(personRepository.findPhoneNumberByFireStation(anyInt()))
-                .thenReturn(ConstantsTest.phones);
-        List<String> phones = phoneAlertService.findPhoneNumberByFireStation(1);
+        Mockito.when(data.getPersons()).thenReturn(ConstantsTest.persons);
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
+        List<String> phones = phoneAlertService.findPhoneNumberByFireStationNumber(1);
         assertNotNull(phones);
         assertEquals(2, phones.size());
     }

@@ -62,6 +62,6 @@ public class ChildAlertControllerTest {
 
         mvc.perform(get("/childAlert").param("address", "address")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isBadRequest());
     }
 }

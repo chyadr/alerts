@@ -1,34 +1,36 @@
 package com.safetynet.alerts.dto;
 
+import com.safetynet.alerts.model.Person;
+
 import java.util.List;
 
 public class ChildrenAdultsInfoDTO {
 
-    private List<PersonDTO> adults;
-    private List<PersonDTO> children;
+    private List<Person> adults;
+    private List<Person> children;
 
-    public List<PersonDTO> getAdults() {
+    public List<Person> getAdults() {
         return adults;
     }
 
-    public void setAdults(List<PersonDTO> adults) {
+    public void setAdults(List<Person> adults) {
         this.adults = adults;
     }
 
-    public ChildrenAdultsInfoDTO adults(List<PersonDTO> adults) {
+    public ChildrenAdultsInfoDTO adults(List<Person> adults) {
         this.adults = adults;
         return this;
     }
 
-    public List<PersonDTO> getChildren() {
+    public List<Person> getChildren() {
         return children;
     }
 
-    public void setChildren(List<PersonDTO> children) {
+    public void setChildren(List<Person> children) {
         this.children = children;
     }
 
-    public ChildrenAdultsInfoDTO children(List<PersonDTO> children) {
+    public ChildrenAdultsInfoDTO children(List<Person> children) {
         this.children = children;
         return this;
     }

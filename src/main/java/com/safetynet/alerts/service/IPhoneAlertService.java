@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface IPhoneAlertService {
 
-    List<String> findPhoneNumberByFireStation(Integer fireStationNumber);
+    List<String> findPhoneNumberByFireStationNumber (Integer fireStationNumber);
 
 }

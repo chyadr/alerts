@@ -1,8 +1,8 @@
 package com.safetynet.alerts.service;
 
 import com.safetynet.alerts.ConstantsTest;
-import com.safetynet.alerts.dto.PersonFireStationNumberDTO;
-import com.safetynet.alerts.repository.PersonRepository;
+import com.safetynet.alerts.dto.FireDTO;
+import com.safetynet.alerts.model.Data;
 import com.safetynet.alerts.service.impl.FireService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(SpringExtension.class)
 public class FireServiceTest {
@@ -21,15 +20,16 @@ public class FireServiceTest {
     private FireService fireService;
 
     @Mock
-    private PersonRepository personRepository;
+    private Data data;
 
     @Test
     public void whenFindPersonsByAddress_thenPersonFireStationNumberDTOShouldBeFound() {
-        Mockito.when(personRepository.findPersonsByAddress(anyString()))
-                .thenReturn(ConstantsTest.personsWithBirthDate);
-        PersonFireStationNumberDTO personFireStationNumberDTO = fireService.findPersonFireStationNumber("address");
+        Mockito.when(data.getFirestations()).thenReturn(ConstantsTest.fireStations);
+        Mockito.when(data.getPersons()).thenReturn(ConstantsTest.persons);
+        Mockito.when(data.getMedicalrecords()).thenReturn(ConstantsTest.medicalRecords);
+
+        FireDTO personFireStationNumberDTO = fireService.findPersonFireStationNumber("address");
         assertNotNull(personFireStationNumberDTO);
-        assertNotNull(personFireStationNumberDTO.getStationNumber());
     }
 
 }

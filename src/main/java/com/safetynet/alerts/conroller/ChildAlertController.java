@@ -34,7 +34,7 @@ public class ChildAlertController {
 
         if (CollectionUtils.isEmpty(childrenAdultsInfoDTO.getChildren())) {
             log.warn("[childAlert] - No Children found");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Children found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Children found");
         }
 
         log.info("[childAlert] - Response {}", childrenAdultsInfoDTO.toString());

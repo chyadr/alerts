@@ -1,42 +1,49 @@
 package com.safetynet.alerts.service.impl;
 
-import com.safetynet.alerts.dto.AddressDTO;
-import com.safetynet.alerts.dto.AddressPersonsMedicalRecordDTO;
-import com.safetynet.alerts.dto.PersonDTO;
-import com.safetynet.alerts.mapper.PersonMapper;
+import com.safetynet.alerts.dto.PersonMedicalRecordDTO;
+import com.safetynet.alerts.model.Data;
+
+import com.safetynet.alerts.model.FireStation;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.model.Person;
-import com.safetynet.alerts.repository.PersonRepository;
 import com.safetynet.alerts.service.IFloodService;
+import com.safetynet.alerts.util.CalculateAge;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class FloodService implements IFloodService {
+    private final Data data;
 
-    private final PersonRepository personRepository;
-
-    public FloodService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public FloodService(Data data) {
+        this.data = data;
     }
 
     @Override
-    public List<AddressPersonsMedicalRecordDTO> findAddressPersonsMedicalRecords(List<Integer> stations) {
+    public Map<String,List<PersonMedicalRecordDTO>> findAddressPersonsMedicalRecords(List<Integer> stations) {
 
-        List<Person> persons = personRepository.findPersonsByStations(stations);
-        List<PersonDTO> personDTOS = persons.stream().map(PersonMapper::mapPerson).collect(Collectors.toList());
-        Map<AddressDTO, Set<PersonDTO>> map = personDTOS.stream().collect(Collectors.groupingBy(PersonDTO::getAddressDTO, TreeMap::new, Collectors.toSet()));
+        List<FireStation> fireStations = data.getFirestations().stream().filter(f->stations.contains(f.getStation())).collect(Collectors.toList());
+        List<Person> persons = data.getPersons().stream().filter(p-> fireStations.stream().anyMatch(f->f.getAddress().equals(p.getAddress()))).collect(Collectors.toList());
+        List<MedicalRecord> medicalRecords = data.getMedicalrecords().stream().filter(m->persons.stream()
+                .anyMatch(p->p.getFirstName().equals(m.getFirstName()) && p.getLastName().equals(m.getLastName()))).collect(Collectors.toList());
 
-        List<AddressPersonsMedicalRecordDTO> addressPersonsMedicalRecordDTOS = map.entrySet().stream().map(m -> {
-            AddressPersonsMedicalRecordDTO adr = new AddressPersonsMedicalRecordDTO();
-            adr.setPersonDTOS(m.getValue());
-            adr.setAddressDTO(m.getKey());
-            return adr;
-        }).collect(Collectors.toList());
-        return addressPersonsMedicalRecordDTOS;
+        // calculate age
+        persons.forEach(p -> {
+            Optional<MedicalRecord> mdr = medicalRecords.stream()
+                    .filter(m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName())).findFirst();
+            mdr.ifPresent(medicalRecord -> p.setAge(CalculateAge.calculateAge(medicalRecord.getBirthdate())));
+        });
+
+        Map<String,List<PersonMedicalRecordDTO>> map=persons.stream().map(p -> {
+            PersonMedicalRecordDTO pm = new PersonMedicalRecordDTO();
+            pm.setPerson(p);
+            pm.setMedicalRecord(medicalRecords.stream().filter(m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName())).findFirst().orElseGet(null));
+            return pm;
+        }).collect(Collectors.groupingBy(pm -> pm.getPerson().getAddress(), Collectors.toList()));
+
+
+        return  map;
     }
 }

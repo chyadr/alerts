@@ -1,6 +1,6 @@
 package com.safetynet.alerts.conroller;
 
-import com.safetynet.alerts.mapper.PersonMapper;
+
 import com.safetynet.alerts.service.IPhoneAlertService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("phoneAlert")
 public class PhoneAlertController {
-    private static final Logger log = LogManager.getLogger(PersonMapper.class);
+    private static final Logger log = LogManager.getLogger(PhoneAlertController.class);
     private final IPhoneAlertService phoneAlertService;
 
     public PhoneAlertController(IPhoneAlertService phoneAlertService) {
@@ -28,7 +28,7 @@ public class PhoneAlertController {
     public ResponseEntity<List<String>> findPhoneNumberByFireStation(@RequestParam(name = "firestation") Integer fireStationNumber) {
         log.info("[phoneAlert] - params [{}]", fireStationNumber);
 
-        List<String> phoneNumber = phoneAlertService.findPhoneNumberByFireStation(fireStationNumber);
+        List<String> phoneNumber = phoneAlertService.findPhoneNumberByFireStationNumber(fireStationNumber);
         log.info("[phoneAlert] - Response {}", phoneNumber.toString());
 
         return ResponseEntity.status(HttpStatus.OK).body(phoneNumber);

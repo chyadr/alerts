@@ -42,13 +42,13 @@ public class PersonsInfoControllerTest {
             throws Exception {
 
 
-        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.personsInfos);
+        when(personService.findAllByFirstNameAndLastName(anyString(), anyString())).thenReturn(ConstantsTest.medicalRecordDTOS);
 
         mvc.perform(get("/personInfo").param("firstName", "John").param("lastName", "Boyd")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].firstName", org.hamcrest.Matchers.is("John")))
-                .andExpect(jsonPath("$[0].lastName", org.hamcrest.Matchers.is("Boyd")));
+                .andExpect(jsonPath("$[0].person.firstName", org.hamcrest.Matchers.is("John")))
+                .andExpect(jsonPath("$[0].person.lastName", org.hamcrest.Matchers.is("Boyd")));
     }
 }
