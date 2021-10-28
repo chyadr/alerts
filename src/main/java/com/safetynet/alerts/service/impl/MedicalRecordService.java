@@ -1,6 +1,7 @@
 package com.safetynet.alerts.service.impl;
 
 import com.safetynet.alerts.model.Data;
+import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.service.IMedicalRecordService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,13 @@ public class MedicalRecordService implements IMedicalRecordService {
     }
 
     @Override
-    public com.safetynet.alerts.model.MedicalRecord createMedicalRecord(com.safetynet.alerts.model.MedicalRecord medicalRecord) {
+    public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) {
         data.getMedicalrecords().add(medicalRecord);
         return medicalRecord;
     }
 
     @Override
-    public com.safetynet.alerts.model.MedicalRecord updateMedicalRecord(com.safetynet.alerts.model.MedicalRecord medicalRecord) {
+    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
 
         data.getMedicalrecords().forEach(m -> {
             if (m.getFirstName().equals(medicalRecord.getFirstName()) && m.getLastName().equals(medicalRecord.getLastName())){

@@ -1,12 +1,9 @@
 package com.safetynet.alerts.contoller;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.ConstantsTest;
 import com.safetynet.alerts.conroller.FireStationController;
-
 import com.safetynet.alerts.model.FireStation;
-import com.safetynet.alerts.service.IPersonService;
+import com.safetynet.alerts.service.IFireStationService;
 import com.safetynet.alerts.service.impl.FireStationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Collections;
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -33,7 +26,7 @@ public class FireStationControllerTest {
 
     private MockMvc mvc;
     @Mock
-    private FireStationService fireStationService;
+    private IFireStationService fireStationService;
     private ObjectMapper objectMapper;
 
     @InjectMocks

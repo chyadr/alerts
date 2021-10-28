@@ -6,11 +6,6 @@ import com.safetynet.alerts.model.Person;
 import com.safetynet.alerts.service.IChildAlertService;
 import com.safetynet.alerts.util.CalculateAge;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

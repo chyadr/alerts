@@ -45,7 +45,7 @@ public class PersonService implements IPersonService {
 
 
     @Override
-    public Person createPerson(com.safetynet.alerts.model.Person person) {
+    public Person createPerson(Person person) {
         data.getPersons().add(person);
         return person;
     }

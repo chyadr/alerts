@@ -58,6 +58,7 @@ public class FireStationService implements IFireStationService {
                 filter(p -> data.getFirestations().stream().anyMatch(f -> f.getStation().equals(stationNumber)
                         && f.getAddress().equals(p.getAddress()))).collect(Collectors.toList());
         personInfosDTO.setPersons(persons);
+        // calculate age
         personInfosDTO.setNumberOfAdult((persons.stream().filter(p -> data.getMedicalrecords().stream()
                 .anyMatch(m -> m.getFirstName().equals(p.getFirstName()) && m.getLastName().equals(p.getLastName())
                         && CalculateAge.calculateAge(m.getBirthdate()) < 18 )).count()));

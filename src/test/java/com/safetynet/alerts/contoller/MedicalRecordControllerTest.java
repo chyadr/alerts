@@ -3,9 +3,7 @@ package com.safetynet.alerts.contoller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.alerts.ConstantsTest;
 import com.safetynet.alerts.conroller.MedicalRecordController;
-import com.safetynet.alerts.model.MedicalRecord;
 import com.safetynet.alerts.service.IMedicalRecordService;
-import com.safetynet.alerts.service.IPersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,8 +28,6 @@ public class MedicalRecordControllerTest {
     private MockMvc mvc;
     @Mock
     private IMedicalRecordService medicalRecordService;
-    @Mock
-    private IPersonService personService;
     @InjectMocks
     private MedicalRecordController medicalRecordController;
 

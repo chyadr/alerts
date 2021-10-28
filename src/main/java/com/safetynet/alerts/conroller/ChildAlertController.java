@@ -1,5 +1,4 @@
 package com.safetynet.alerts.conroller;
-
 import com.safetynet.alerts.dto.ChildrenAdultsInfoDTO;
 import com.safetynet.alerts.service.IChildAlertService;
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChildAlertController {
 
     private static final Logger log = LogManager.getLogger(ChildAlertController.class);
-
 
     private final IChildAlertService childAlertService;
 
